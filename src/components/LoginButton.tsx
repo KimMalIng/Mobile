@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
         borderRadius: 4
     },
     text: {
-        fontFamily: 'SeoulNamsanEB',
+        fontFamily: 'SeoulNamsanB',
         fontSize: 16,
         color: 'white'
     }

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, PanResponder, StyleSheet, PanResponderGestureState } from 'react-native';
-import DottedLine from './DottedLine';
 
 interface TodoProps {
   text: string;
@@ -29,7 +28,7 @@ const Todo: React.FC<TodoProps> = ({ text, label }) => {
 
   return (
     <>
-      <DottedLine/>
+      <View style={{ margin: '5%', width: '100%', borderWidth: 0.8, borderRadius:1,  borderColor: '#dce1d1', borderStyle: 'dashed' }} />
       <View style={styles.todo} {...panResponder.panHandlers}>
         <View style={[styles.fill, { width: `${filledWidthPercentage * 100}%`, backgroundColor: getFilledColor(label) }]} />
         <Text style={styles.text}>{text}</Text>

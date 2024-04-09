@@ -54,7 +54,6 @@ const TodoList: React.FC = () => {
       }
     },
     onPanResponderRelease: () => {
-      // Reset swipeHandled after touch event ends
       setSwipeHandled(false);
     },
   });

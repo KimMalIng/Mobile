@@ -33,7 +33,6 @@ const TodoList: React.FC = () => {
       }
       setDate(newDate);
       setSwipeHandled(true);
-      // Fetch data based on the new date from the backend and re-render
       generateExampleTodos(newDate);
     }
   };
@@ -68,7 +67,7 @@ const TodoList: React.FC = () => {
         <View style={styles.todoContainer} {...panResponder.panHandlers}>
           {/* Render todo components with example data */}
           {todos.map((todo, index) => (
-            <Todo key={index} text={todo} label={index % 2} />
+            <Todo key={index} text={todo} label={index % 3} />
           ))}
         </View>
       </View>

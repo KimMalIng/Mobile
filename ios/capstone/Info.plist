@@ -55,5 +55,13 @@
 		<string>SeoulNamsanM.otf</string>
 		<string>SeoulNamsanvert.otf</string>
 	</array>
+	<key>KAKAO_APP_KEY</key>
+	<string>72aab2cc53ae1e9c361b56a8dddd50a7</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>kakao72aab2cc53ae1e9c361b56a8dddd50a7</string>
+		<string>kakaolink</string>
+		<string>kakaokompassauth</string>
+	</array>
 </dict>
 </plist>

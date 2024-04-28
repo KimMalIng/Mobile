@@ -1,10 +1,16 @@
 import React, { useState } from "react";
-import { StyleSheet, View, SafeAreaView, Text, Image, Alert } from "react-native";
+import { StyleSheet, View, SafeAreaView, Text, Image, Alert, TouchableOpacity  } from "react-native";
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import LoginButton from "../components/LoginButton";
 import LoginInput from "../components/LoginInput";
-import MainScreen from './MainScreen';
 import { StackNavigationProp } from "@react-navigation/stack";
+import {
+  login,
+  logout,
+  getProfile as getKakaoProfile,
+  shippingAddresses as getKakaoShippingAddresses,
+  unlink,
+} from "@react-native-seoul/kakao-login";
 
 type RootStackParamList = {
   LoginScreen: undefined;
@@ -20,6 +26,17 @@ interface LoginScreenProps {
 export default function LoginScreen({ navigation }: LoginScreenProps) {
   const [memberId, setMemberId] = useState('');
   const [memberPw, setMemberPw] = useState('');
+  const [result, setResult] = useState<string>("");
+
+  const signInWithKakao = async (): Promise<void> => {
+    try {
+      const token = await login();
+      setResult(JSON.stringify(token));
+      navigation.navigate("MainScreen");
+    } catch (err) {
+      console.error("login err", err);
+    }
+  };
 
   // const handleLogin = async () => {
   //   try {
@@ -38,11 +55,10 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   //   }
   // };
   const handleLogin = () => {
-    // Check if the provided memberId and memberPw match the expected values
-    if (memberId === 'KimMalling' && memberPw === '1234') {
-        navigation.navigate("MainScreen");
-    };
-  }
+    memberId === 'KimMalling' && memberPw === '1234'
+      ? navigation.navigate("MainScreen")
+      : Alert.alert("올바르지 않은 로그인 정보입니다.");
+  };
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
@@ -50,10 +66,15 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
         <Text style={styles.text}>로그인</Text>
         <LoginInput placeholder="example@email.com" keyboardType="email-address" onChangeText={setMemberId} />
         <LoginInput placeholder="비밀번호" keyboardType="default" secureTextEntry={true} onChangeText={setMemberPw} />
-        <LoginButton style={{ width: '85%', height: '15%', marginVertical: 10 }} buttonText="계속하기" onPress={handleLogin} />
-        <LoginButton style={{ width: '85%', height: '15%' }} buttonText="회원가입" />
+        <LoginButton style={{ width: '85%', height: '13%', marginVertical: 8 }} buttonText="계속하기" onPress={handleLogin} />
+        <LoginButton style={{ width: '85%', height: '13%' }} buttonText="회원가입" />
       </View>
-      <Image style={{ marginTop: 30 }} source={require('../assets/image/kakao_login_medium_wide.png')} />
+      <TouchableOpacity onPress={signInWithKakao}>
+        <Image
+          style={{ marginTop: 30 }}
+          source={require('../assets/image/kakao_login_medium_wide.png')}
+        />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }

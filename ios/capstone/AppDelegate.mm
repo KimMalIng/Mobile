@@ -3,6 +3,8 @@
 #import <React/RCTBundleURLProvider.h>
 
 #import <RNKakaoLogins.h>
+
+#import <RNSplashScreen.h>
 //#import <KakaoOpenSDK/KakaoOpenSDK.h>
 //- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
 //                                      sourceApplication:(NSString *)sourceApplication
@@ -38,7 +40,10 @@
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
 
-  return [super application:application didFinishLaunchingWithOptions:launchOptions];
+  [super application:application didFinishLaunchingWithOptions:launchOptions];
+  [RNSplashScreen show];  // 추가
+
+  return YES; // 수정
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
@@ -48,6 +53,7 @@
 
 - (NSURL *)getBundleURL
 {
+
 #if DEBUG
   return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
 #else

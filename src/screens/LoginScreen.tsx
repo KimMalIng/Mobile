@@ -11,6 +11,7 @@ import {
   shippingAddresses as getKakaoShippingAddresses,
   unlink,
 } from "@react-native-seoul/kakao-login";
+import axios from "axios";
 
 type RootStackParamList = {
   LoginScreen: undefined;
@@ -38,22 +39,6 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
     }
   };
 
-  // const handleLogin = async () => {
-  //   try {
-  //     // Simulate login request
-  //     const response = await new Promise((resolve) =>
-  //       setTimeout(() => resolve({ data: { accessToken: 'dummyToken' } }), 1000)
-  //     );
-
-  //     // Assuming the response format is as you described
-  //     const { accessToken } = response.data;
-  //     // Navigate to MainScreen upon successful login
-  //     navigation.navigate("MainScreen", { accessToken });
-  //   } catch (error) {
-  //     // Handle login failure (e.g., show an alert)
-  //     Alert.alert('Login Failed', 'Please check your credentials and try again.');
-  //   }
-  // };
   const handleLogin = () => {
     memberId === 'KimMalling' && memberPw === '1234'
       ? navigation.navigate("MainScreen")

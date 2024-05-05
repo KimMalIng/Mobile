@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, View, SafeAreaView, Text, Image, Alert, TouchableOpacity  } from "react-native";
+import { getTokens } from '../utils/tokenUtils';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import LoginButton from "../components/LoginButton";
 import LoginInput from "../components/LoginInput";
@@ -25,8 +26,8 @@ interface LoginScreenProps {
 }
 
 export default function LoginScreen({ navigation }: LoginScreenProps) {
-  const [memberId, setMemberId] = useState('');
-  const [memberPw, setMemberPw] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [result, setResult] = useState<string>("");
 
   const signInWithKakao = async (): Promise<void> => {
@@ -40,17 +41,15 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   };
 
   const handleLogin = () => {
-    memberId === 'KimMalling' && memberPw === '1234'
-      ? navigation.navigate("MainScreen")
-      : Alert.alert("올바르지 않은 로그인 정보입니다.");
+    getTokens(email, password, navigation);
   };
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.view}>
         <Text style={styles.text}>로그인</Text>
-        <LoginInput placeholder="example@email.com" keyboardType="email-address" onChangeText={setMemberId} />
-        <LoginInput placeholder="비밀번호" keyboardType="default" secureTextEntry={true} onChangeText={setMemberPw} />
+        <LoginInput placeholder="example@email.com" keyboardType="email-address" onChangeText={setEmail} />
+        <LoginInput placeholder="비밀번호" keyboardType="default" secureTextEntry={true} onChangeText={setPassword} />
         <LoginButton style={{ width: '85%', height: '13%', marginVertical: 8 }} buttonText="계속하기" onPress={handleLogin} />
         <LoginButton style={{ width: '85%', height: '13%' }} buttonText="회원가입" />
       </View>

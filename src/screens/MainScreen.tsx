@@ -26,7 +26,6 @@ const MainScreen = () => {
   const currentDate = getCurrentDate();
 
   useEffect(() => {
-    // Simulate API call to get user info
     getTodoInfo();
   }, []);
 
@@ -57,6 +56,8 @@ const MainScreen = () => {
       console.error("Error fetching user info:", error);
     }
   };
+
+  
 
   return (
     <View style={styles.container}>
@@ -91,7 +92,7 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#9CC5A1',
-    flex: 0.14,
+    flex: 0.15,
     alignItems: 'center',
     justifyContent: 'center',
   },

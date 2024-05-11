@@ -22,9 +22,9 @@ const Todo: React.FC<TodoProps> = ({ todoData }) => {
     if (label === 1) {
       return '#A8D5FF';
     } else if (label === 2) {
-      return '#FBE299';
-    } else if (label === 3) {
       return '#FBB4C1';
+    } else if (label === 3) {
+      return '#B7E6B6';
     } else {
       return '#DCE1DE';
     }
@@ -75,7 +75,7 @@ const Todo: React.FC<TodoProps> = ({ todoData }) => {
 const styles = StyleSheet.create({
   todoContainer: {
     backgroundColor: '#FFFFFF',
-    height: '15%',
+    height: 70,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',

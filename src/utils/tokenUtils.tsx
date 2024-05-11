@@ -25,16 +25,18 @@ export const getTokens = (email, password, navigation) => {
               'refreshToken': res.data.refreshToken,
               'memberId': res.data.memberId
             }))
-            navigation.navigate('MainScreen');
+            // navigation.navigate('MainScreen');
+            navigation.navigate('Tab');
           }
 
     }})
     .catch(error =>{
             if(error.response.status === 401){
-                showToast(error.response.data)
+                console.error(error.response.data)
             }
             else{
-                showToast("알수없는 오류")
+                // showToast("알수없는 오류")
+                console.error("알수없는 오류")
             } 
           
     })
@@ -60,7 +62,7 @@ export const verifyTokens = async (navigation) => {
 
   // 최초 접속
   if (Token === null){
-    navigation.reset({routes: [{name: "AuthPage"}]});
+    navigation.reset({routes: [{name: "LoginScreen"}]});
   }
   // 로컬 스토리지에 Token데이터가 있으면 -> 토큰들을 헤더에 넣어 검증 
   else{
@@ -84,7 +86,7 @@ export const verifyTokens = async (navigation) => {
 
       // accessToken 만료, refreshToken 만료 -> 로그인 페이지
       if(code === 401){
-        navigation.reset({routes: [{name: "AuthPage"}]});
+        navigation.reset({routes: [{name: "LoginScreen"}]});
       }
       // accessToken 정상, refreshToken 정상 -> 자동 로그인
       else{

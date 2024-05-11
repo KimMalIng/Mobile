@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Text, View, } from 'react-native';
 import { verifyTokens } from '../utils/tokenUtils';
 
-const SplashScreen = ({navigation}) => {
+const Splash = ({navigation}) => {
     useEffect(()=>{
         verifyTokens(navigation);
     },[])
@@ -16,4 +16,4 @@ const SplashScreen = ({navigation}) => {
     );
 }
 
-export default SplashScreen;
+export default Splash;

@@ -2,67 +2,39 @@ import React, { useState } from "react";
 import { StyleSheet, View, SafeAreaView, Text, Image, Alert, TouchableOpacity  } from "react-native";
 import { getTokens } from '../utils/tokenUtils';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
-import LoginButton from "../components/LoginButton";
+import Button from "../components/LoginButton";
 import LoginInput from "../components/LoginInput";
 import { StackNavigationProp } from "@react-navigation/stack";
-import {
-  login,
-  logout,
-  getProfile as getKakaoProfile,
-  shippingAddresses as getKakaoShippingAddresses,
-  unlink,
-} from "@react-native-seoul/kakao-login";
 import axios from "axios";
 
 type RootStackParamList = {
+  SignupScreen: undefined;
   LoginScreen: undefined;
-  MainScreen: undefined;
 };
 
-type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'LoginScreen'>;
+type SignupScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignupScreen'>;
 
-interface LoginScreenProps {
-  navigation: LoginScreenNavigationProp;
+interface SignupScreenProps {
+  navigation: SignupScreenNavigationProp;
 }
 
-export default function LoginScreen({ navigation }: LoginScreenProps) {
+export default function SignupScreen({ navigation }: SignupScreenProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [result, setResult] = useState<string>("");
-
-  const signInWithKakao = async (): Promise<void> => {
-    try {
-      const token = await login();
-      setResult(JSON.stringify(token));
-      navigation.navigate("MainScreen");
-    } catch (err) {
-      console.error("login err", err);
-    }
-  };
-
-  const handleLogin = () => {
-    getTokens(email, password, navigation);
-  };
 
   const handleSignup = () => {
-    navigation.navigate("SignupScreen");
-  }
+    getTokens(email, password, navigation);
+  };
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.view}>
-        <Text style={styles.text}>로그인</Text>
+        <Text style={styles.text}>회원가입</Text>
         <LoginInput placeholder="example@email.com" keyboardType="email-address" onChangeText={setEmail} />
         <LoginInput placeholder="비밀번호" keyboardType="default" secureTextEntry={true} onChangeText={setPassword} />
-        <LoginButton style={{ width: '85%', height: '13%', marginVertical: 8 }} buttonText="계속하기" onPress={handleLogin} />
-        <LoginButton style={{ width: '85%', height: '13%' }} buttonText="회원가입" onPress={handleSignup}/>
+        <LoginInput placeholder="비밀번호 확인" keyboardType="default" secureTextEntry={true} onChangeText={setPassword} />
+        <Button style={{ width: '85%', height: '13%', marginTop: '4%' }} buttonText="계속하기" onPress={handleSignup} />
       </View>
-      <TouchableOpacity onPress={signInWithKakao}>
-        <Image
-          style={{ marginTop: 30 }}
-          source={require('../assets/image/kakao_login_medium_wide.png')}
-        />
-      </TouchableOpacity>
     </SafeAreaView>
   );
 }

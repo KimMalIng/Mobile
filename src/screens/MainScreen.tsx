@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView, Text } from 'react-native';
 import Todo from '../components/Todo';
-import TapNavigation from '../navigation/TapNavigation';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import { URL } from '../utils/const';
+import { GetCalenderUseCase } from '../Domain/UseCase';
+import { CalenderRepositoryImpl, CredentialRepositoryImpl } from "../Data/Repository";
+import { CalenderEntity } from "../Domain/Entity";
 
 const getFormattedDate = (date: Date) => {
   const month = date.getMonth() + 1;
@@ -12,52 +11,121 @@ const getFormattedDate = (date: Date) => {
   return `${month}월 ${day}일`;
 };
 
-const getCurrentDate = () => {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const day = String(today.getDate()).padStart(2, '0');
-  return `${year}.${month}.${day}`;
-};
-
 const MainScreen = () => {
-  const [date, setDate] = useState(new Date());
-  const [todoInfo, setTodoInfo] = useState();
-  const currentDate = getCurrentDate();
+  const getCalenderUseCase = new GetCalenderUseCase(new CalenderRepositoryImpl(), new CredentialRepositoryImpl());
+  const [date, setDate] = useState<Date>(new Date());
+  const [startDate, setStartDate] = useState<Date>(new Date());
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [dateList, setDateList] = useState<DateListType>({});
+  const [isSortFinish, setIsSortFinish] = useState(false);
+  const [isDateListLoading, setIsDateListLoading] = useState(true);
+
+  const sortCalenderList = async (d: Date, calender: CalenderEntity | null | undefined): Promise<void> => {
+    const dateSaveList: DateType[] = [];
+    if(calender === null || typeof calender === "undefined") return Promise.reject(404);
+    const end = (endDate === null) ? startDate : endDate;
+    if(d <= end){
+     
+      const dayMonthKey = (d.getMonth() + 1 < 10)? `0${(d.getMonth() + 1)}`: `${(d.getMonth() + 1)}`;
+      const dayDatekey = (d.getDate() < 10)? `0${d.getDate()}` : `${d.getDate()}`;
+      const dateKey = `${d.getFullYear()}.${dayMonthKey}.${dayDatekey}`;
+      await Promise.all(
+        calender.EveryTimeJob.map((c) => {
+          const day = d.getDay();
+          if((c.dayOfTheWeek + 1) === day){
+            const saveDate: DateType = {
+              id: c.id,
+              label: c.label,
+              name: c.name,
+              startTime: c.startTime,
+              endTime: c.endTime,
+              fixed: true,
+              complete: c.complete,
+              estimatedTime: c.estimatedTime
+            }
+         
+            dateSaveList.push(saveDate);
+          }
+        })
+      );
+      await Promise.all(
+        calender.SeperatedJob.map((c) => {
+          if(dateKey === c.day){
+            const saveDate: DateType = {
+              id: c.id,
+              label: c.label,
+              name: c.name,
+              startTime: c.startTime,
+              endTime: c.endTime,
+              fixed: c.fixed,
+              complete: c.complete,
+              estimatedTime: c.estimatedTime
+            }
+            dateSaveList.push(saveDate);
+          }
+        })
+      );
+      await Promise.all(
+        calender.FixedJob.map((c) => {
+          const dateKeyToDate = new Date(`${dateKey.split(".")[0]}-${dateKey.split(".")[1]}-${dateKey.split(".")[2]}`);
+          const cStartDateToDate = new Date(`${c.startDate.split(".")[0]}-${c.startDate.split(".")[1]}-${c.startDate.split(".")[2]}`);
+          const deadline = (c.deadline === null)? c.startDate : c.deadline;
+          const cEndDateToDate = new Date(`${deadline.split(".")[0]}-${deadline.split(".")[1]}-${deadline.split(".")[2]}`);
+          if(dateKeyToDate >= cStartDateToDate && dateKeyToDate <= cEndDateToDate){
+            const saveDate: DateType = {
+              id: c.id,
+              label: c.label,
+              name: c.name,
+              startTime: c.startTime,
+              endTime: c.endTime,
+              fixed: true,
+              complete: c.complete,
+              estimatedTime: c.estimatedTime
+            }
+            dateSaveList.push(saveDate);
+          }
+        })
+      );
+        const sortDateList = dateSaveList.sort((a, b) => {
+          const aTime = (Number(a.startTime.split(":")[0]) * 60) + (Number(a.startTime.split(":")[1]));
+          const bTime = (Number(b.startTime.split(":")[0]) * 60) + (Number(b.startTime.split(":")[1]));
+          return aTime - bTime;
+        });
+      setDateList({
+        ...dateList,
+        [dateKey]: sortDateList
+      })
+      // dateSaveList.current.splice(0, dateSaveList.current.length);
+      const nextDate = new Date(d);
+      await sortCalenderList(new Date(nextDate.setDate(nextDate.getDate() + 1)), calender);
+    }
+    else {
+      setIsSortFinish(true);
+      setTimeout(() => {
+        setIsDateListLoading(false);
+      }, 1000)
+    }
+  }
+
+  const getList = async () => {
+    const e = (endDate === null)? (startDate) : (endDate);
+    try {
+      const data = await getCalenderUseCase.execute(startDate, e);
+      setDateList({});
+      sortCalenderList(startDate, data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
-    getTodoInfo();
-  }, []);
+    setIsDateListLoading(true);
+    getList();
+  }, [startDate, endDate]);
 
-  const getTodoInfo = async () => {
-    try {
-      const tokensString = await AsyncStorage.getItem("Tokens");
-      if (!tokensString) {
-        console.error("Tokens not found in AsyncStorage");
-        return;
-      }
-  
-      const tokens = JSON.parse(tokensString);
-      const { accessToken, refreshToken } = tokens;
-  
-      if (!accessToken) {
-        console.error("Access token not found");
-        return;
-      }
-  
-      const headers = {
-        Authorization: `Bearer ${accessToken}`,
-        Cookie: `refreshToken=${refreshToken}`
-      };
-  
-      const response = await axios.get(`${URL}/timetable/period?startDate=${currentDate}&endDate=${currentDate}`, { headers });
-      setTodoInfo(response.data);
-    } catch (error) {
-      console.error("Error fetching user info:", error);
-    }
-  };
-
-  
+  useEffect(() => {
+    if(isSortFinish) return;
+  }, [isSortFinish]);
 
   return (
     <View style={styles.container}>
@@ -66,19 +134,9 @@ const MainScreen = () => {
       </View>
       <ScrollView style={{flex: 1}} contentContainerStyle={styles.scrollViewContent} contentOffset={{x:0, y:0}}>
         <View style={styles.todoContainer}>
-        {todoInfo && (
-          <>
-            {todoInfo.EveryTimeJob.map((todoData) => (
+            {dateList.map((todoData) => (
               <Todo key={todoData.id} todoData={todoData} />
             ))}
-            {todoInfo.SeperatedJob.map((todoData) => (
-              <Todo key={todoData.id} todoData={todoData} />
-            ))}
-            {todoInfo.FixedJob.map((todoData) => (
-              <Todo key={todoData.id} todoData={todoData} />
-            ))}
-          </>
-        )}
         </View>
       </ScrollView>
     </View>

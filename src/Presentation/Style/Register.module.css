@@ -1,0 +1,44 @@
+.Register {
+  width: 100vw;
+  height: 100vh;
+  background-color: #9cc5a1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ContentBox {
+  width: 500px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ContentBox > h1{
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 40px;
+}
+
+.idCheckBox {
+  display: flex;
+  justify-content: space-between;
+}
+
+.idCheckBtn {
+  width: 20%;
+  height: 36px;
+  background-color: #DCE1DE;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  cursor: pointer;
+  user-select: none;
+}

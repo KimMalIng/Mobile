@@ -1,4 +1,4 @@
-import { AuthEntity, UserEntity } from "@/Domain/Entity";
+import {AuthEntity, UserEntity} from '../Entity';
 
 interface AuthRepository {
   signUp(data: AuthEntity): Promise<UserEntity>;

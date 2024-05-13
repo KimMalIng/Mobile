@@ -1,9 +1,9 @@
-import { SERVER_URL } from "@/Const";
-import { AuthEntity, UserEntity } from "@/Domain/Entity";
-import { AuthRepository } from "@/Domain/Repository";
-import { LocalStorageDataSource, AuthDataSource } from "@/Data/DataSource";
+import {SERVER_URL} from '@/Const';
+import {AuthEntity, UserEntity} from '@/Domain/Entity';
+import {AuthRepository} from '@/Domain/Repository';
+import {LocalStorageDataSource, AuthDataSource} from '@/Data/DataSource';
 
-class AuthRepositoryImpl implements AuthRepository{
+class AuthRepositoryImpl implements AuthRepository {
   async delete(id: string): Promise<void> {
     await AuthDataSource.delete(id);
   }
@@ -24,14 +24,13 @@ class AuthRepositoryImpl implements AuthRepository{
     }
   }
   logout(): Promise<void> {
-    return new Promise((resolve)=>{
-      localStorage.removeItem("auth");
-    })
+    return new Promise(resolve => {
+      localStorage.removeItem('auth');
+    });
   }
   oauth(): Promise<void> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
-  
 }
 
 export default AuthRepositoryImpl;

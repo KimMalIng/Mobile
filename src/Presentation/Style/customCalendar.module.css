@@ -1,0 +1,57 @@
+.MonthCalendar {
+    background-color: rgb(255, 255, 255);
+    height: 100%;
+    width: 100%;
+    padding: 10px;
+    font-size: 20px;
+    border: none;
+    /* height: auto; */
+}
+
+.DayTile {
+    margin-top: 10px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: bisque;
+}
+
+.NoScheduleDayTile {
+    margin-top: 10px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+}
+
+.ScheduleList {
+    color: #000;
+    
+}
+
+.DialogTitle {
+    font-weight: 600;
+    color: rgb(33, 31, 38);
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.CalenderLabelBox {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 5px;
+}
+
+.CalenderLabel {
+    width: 12px;
+    height: 12px;
+    border-radius: 100%;
+}
+
+.None {
+    display: none;
+}

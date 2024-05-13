@@ -1,0 +1,127 @@
+.TodoProgress {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.TodoBox {
+  width: 100%;
+  height: 120px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  border-top: 2px dashed rgb(232, 232, 232);
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.TodoBox:last-child {
+  border-bottom: 2px dashed rgb(232, 232, 232);
+}
+
+.TodoContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 75%;
+  cursor: pointer;
+}
+
+.ColorLabel {
+  width: 45px;
+  height: 22.5px;
+  background-color: black;
+  z-index: 10;
+  margin-right: -25px;
+  margin-top: -10px;
+  border-radius: 1px;
+  box-shadow: 0.2px 0.2px 0.2px 0.2px rgba(0, 0, 0, 0.2);
+}
+
+.TodoFixed,
+.TodoCheck {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.TodoFixed > img {
+  position: absolute;
+  right: 0%;
+  margin-right: -20px;
+}
+
+.CheckboxLabel {
+  display: flex;
+  margin-right: 10px;
+}
+
+.TodoBody {
+  width: calc(85%);
+  height: 75%;
+  display: flex;
+  align-items: center;
+  padding-left: 40px;
+  border-radius: 1px;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.TodoBody > div > p,
+.DoneTodoBody > div > p {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 900;
+  margin-left: 10px;
+}
+
+.DoneTodoBody {
+  width: 85%;
+  height: 75%;
+  display: flex;
+  background-color: #9cc5a1;
+  align-items: center;
+  padding-left: 40px;
+  border-radius: 1px;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.TimeTable {
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.TimeTable > p {
+  font-size: 14px;
+  line-height: 50px;
+}
+
+.TimeTable > p:first-child {
+  border-bottom: 2px solid rgb(232, 232, 232);
+}
+
+.CheckboxCustom {
+  width: 24px;
+  height: 24px;
+  background-color: #fff;
+  border-radius: 4px;
+}
+
+.CheckboxLabel input:checked + .CheckboxCustom::before {
+  content: "\2713";
+  padding-top: 5px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #49a078;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  border-radius: 2px;
+}
+
+.ProgressBar {
+  border-radius: 10px;
+}

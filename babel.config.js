@@ -16,10 +16,9 @@ module.exports = function (api) {
             '.ios.js',
             '.ios.tsx',
           ],
-          root: ['.'],
+          root: ['./src'],
           alias: {
             '@/Const': './src/Const',
-            '@/Type': './src/Type',
             '@/Domain/Entity': './src/Domain/Entity',
             '@/Domain/UseCase': './src/Domain/UseCase',
             '@/Domain/Repository': './src/Domain/Repository',

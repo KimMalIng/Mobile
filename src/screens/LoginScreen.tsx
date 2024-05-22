@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, View, SafeAreaView, Text, Image, Alert, TouchableOpacity  } from "react-native";
 import { getTokens } from '../utils/tokenUtils';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
 import LoginButton from "../components/LoginButton";
 import LoginInput from "../components/LoginInput";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -17,6 +16,7 @@ import axios from "axios";
 type RootStackParamList = {
   LoginScreen: undefined;
   MainScreen: undefined;
+  SignupScreen: undefined;
 };
 
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'LoginScreen'>;

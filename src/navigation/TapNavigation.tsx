@@ -3,12 +3,20 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MainScreen from '../screens/MainScreen';
 import MypageScreen from '../screens/MypageScreen';
 import { View, Text, TouchableOpacity } from 'react-native';
+import CreateTodo from '../screens/CreateTodo';
+import UserInfoScreen from '../screens/UserInfoScreen';
 
 function MyTabBar({ state, descriptors, navigation }) {
   return (
     <View style={{ flexDirection: 'row' }}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
+        
+        // tabBarButton이 null이면 해당 탭을 렌더링하지 않습니다.
+        if (options.tabBarShowLabel === false) {
+          return null;
+        }
+
         const label =
           options.tabBarLabel !== undefined
             ? options.tabBarLabel
@@ -69,7 +77,10 @@ const TabNavigation = () => {
       tabBar={props => <MyTabBar {...props} />}
       >
         <Tab.Screen name='홈' component={MainScreen}/>
+        <Tab.Screen name='Main' component={MainScreen} options={{ tabBarShowLabel: false }}/>
         <Tab.Screen name='마이페이지' component={MypageScreen}/>
+        <Tab.Screen name='CreateTodo' component={CreateTodo} options={{ tabBarShowLabel: false }}/>
+        <Tab.Screen name='UserInfoScreen' component={UserInfoScreen} options={{ tabBarShowLabel: false }}/>
       </Tab.Navigator>
   );
 };

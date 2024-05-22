@@ -1,7 +1,7 @@
 import {SERVER_URL} from '@/Const';
 import {AuthEntity, UserEntity} from '@/Domain/Entity';
 import {AuthRepository} from '@/Domain/Repository';
-import {LocalStorageDataSource, AuthDataSource} from '@/Data/DataSource';
+import {AuthDataSource} from '@/Data/DataSource';
 
 class AuthRepositoryImpl implements AuthRepository {
   async delete(id: string): Promise<void> {

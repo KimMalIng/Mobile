@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, PanResponder, PanResponderGestureState } from 'react-native';
+import { View, Text, StyleSheet, PanResponder, PanResponderGestureState, Alert } from 'react-native';
+import { updateCompletion } from '../utils/todoUtils';
 
 interface TodoProps {
   todoData: {
@@ -17,13 +18,14 @@ interface TodoProps {
 const Todo: React.FC<TodoProps> = ({ todoData }) => {
   const [filledWidthPercentage, setFilledWidthPercentage] = useState(0);
   const [filledPercent, setFilledPercent] = useState('0');
+  const [initialFilledWidthPercentage, setInitialFilledWidthPercentage] = useState(0);
 
   const getFilledColor = (label: number): string => {
     if (label === 1) {
       return '#A8D5FF';
     } else if (label === 2) {
       return '#FBB4C1';
-    } else if (label === 3) {
+    } else if (label === 0) {
       return '#B7E6B6';
     } else {
       return '#DCE1DE';
@@ -35,7 +37,9 @@ const Todo: React.FC<TodoProps> = ({ todoData }) => {
   };
 
   useEffect(() => {
-    setFilledWidthPercentage(calculateFilledWidth(todoData.completion));
+    const initialWidth = calculateFilledWidth(todoData.completion);
+    setFilledWidthPercentage(initialWidth);
+    setInitialFilledWidthPercentage(initialWidth);
   }, [todoData.completion]);
 
   useEffect(() => {
@@ -51,19 +55,55 @@ const Todo: React.FC<TodoProps> = ({ todoData }) => {
     setFilledPercent(`${Math.round(newPercentage * 100)}`);
   };
 
+  const handlePanResponderRelease = () => {
+    if (todoData.isFixed) return; // Do nothing if the todo is fixed
+
+    Alert.alert(
+      '완료도를 저장하시겠습니까?',
+      '',
+      [
+        {
+          text: '아니오',
+          onPress: () => {
+            setFilledWidthPercentage(initialFilledWidthPercentage);
+            setFilledPercent(`${Math.round(initialFilledWidthPercentage * 100)}`);
+          },
+          style: 'cancel',
+        },
+        {
+          text: '예',
+          onPress: () => {
+            updateCompletion(todoData.id, filledPercent);
+            console.log(`id: ${todoData.id}, 완료도 저장: ${filledPercent}`);
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderMove: handlePanResponderMove,
+    onPanResponderRelease: handlePanResponderRelease,
   });
 
   return (
     <>
       <View style={styles.dottedLine} />
+      { todoData.isFixed ?
+      <View style={styles.todoContainer}>
+        <Text style={styles.completionText}>{todoData.name}</Text>
+        <View style={[styles.fill, { width: `${filledWidthPercentage * 100}%`, backgroundColor: getFilledColor(todoData.label) }]} />
+        <Text style={[styles.completionText, {fontSize: 13, fontWeight: '400'}]}>고정 일정</Text>
+      </View>
+      :
       <View style={styles.todoContainer} {...(!todoData.isFixed && panResponder.panHandlers)}>
         <Text style={styles.completionText}>{todoData.name}</Text>
         <View style={[styles.fill, { width: `${filledWidthPercentage * 100}%`, backgroundColor: getFilledColor(todoData.label) }]} />
-        {!todoData.isFixed && <Text style={styles.completionText}>{filledPercent}%</Text>}
+        <Text style={[styles.completionText, {fontSize: 13, fontWeight: '400'}]}>전체 완료도 {filledPercent}%</Text>
       </View>
+      }
       <View style={styles.timeContainer}>
         <Text style={styles.timeText}>{todoData.startTime}</Text>
         <Text style={styles.timeText}>{todoData.endTime}</Text>
@@ -107,9 +147,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // paddingHorizontal: 10,
     marginTop: 5,
-    width: '100%', // Added to ensure full width
+    width: '100%',
   },
   timeText: {
     fontSize: 12,

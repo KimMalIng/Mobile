@@ -1,15 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
-const URL = 'https://server.kimmaling.com'
-
-const showToast = (text) =>{
-    Toast.show({
-        type: 'error',
-        position: 'bottom',
-        text1: text,
-      });
-};
+import { URL } from "./const";
 
 export const getTokens = (email, password, navigation) => {
     axios.post(`${URL}/users/login`,
@@ -35,8 +27,7 @@ export const getTokens = (email, password, navigation) => {
                 console.error(error.response.data)
             }
             else{
-                // showToast("알수없는 오류")
-                console.error("알수없는 오류")
+                console.error(error)
             } 
           
     })
@@ -59,7 +50,6 @@ const getTokenFromLocal = async () => {
 
 export const verifyTokens = async (navigation) => {
   const Token = await getTokenFromLocal();
-
   // 최초 접속
   if (Token === null){
     navigation.reset({routes: [{name: "LoginScreen"}]});
@@ -90,9 +80,8 @@ export const verifyTokens = async (navigation) => {
       }
       // accessToken 정상, refreshToken 정상 -> 자동 로그인
       else{
-        navigation.reset({routes: [{name: "HomeTab"}]});
+        navigation.reset({routes: [{name: "Tab"}]});
       }
     }
-
   }
 };

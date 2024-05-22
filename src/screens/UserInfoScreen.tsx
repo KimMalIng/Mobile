@@ -8,18 +8,18 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { URL } from '../utils/const';
 
 type RootStackParamList = {
-  MypageScreen: undefined;
-  MainScreen: undefined;
   UserInfoScreen: undefined;
+  MainScreen: undefined;
+  MypageScreen: undefined;
 };
 
-type MypageScreenNavigationProp = StackNavigationProp<RootStackParamList, 'MypageScreen'>;
+type UserInfoScreenNavigationProp = StackNavigationProp<RootStackParamList, 'UserInfoScreen'>;
 
-interface MypageScreenProps {
-  navigation: MypageScreenNavigationProp;
+interface UserInfoScreenProps {
+  navigation: UserInfoScreenNavigationProp;
 }
 
-export default function MypageScreen({ navigation }: MypageScreenProps) {
+export default function UserInfoScreen({ navigation }: UserInfoScreenProps) {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
   useEffect(() => {
@@ -54,10 +54,6 @@ export default function MypageScreen({ navigation }: MypageScreenProps) {
       console.error("Error fetching user info:", error);
     }
   };
-
-  const handleChange = () => {
-    navigation.navigate('UserInfoScreen');
-  }
   
 
   return (
@@ -72,8 +68,7 @@ export default function MypageScreen({ navigation }: MypageScreenProps) {
             ) : userInfo.loginType === "kakao" ? (
               <Text style={styles.serviceText}>카카오 로그인</Text>
             ) : null}
-            <Button style={[styles.button, {marginBottom: "5%"}]} buttonText="로그아웃" />
-            <Button style={styles.button} buttonText="정보 수정" onPress={handleChange} />
+            <Button style={styles.button} buttonText="완료" />
           </>
         ) : (
           <Text>Loading...</Text>

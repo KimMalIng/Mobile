@@ -12,6 +12,7 @@ interface TodoProps {
     completion: number;
     isFixed: boolean;
     isComplete: boolean;
+    isEverytime: boolean;
   };
 }
 
@@ -25,7 +26,7 @@ const Todo: React.FC<TodoProps> = ({ todoData }) => {
       return '#A8D5FF';
     } else if (label === 2) {
       return '#FBB4C1';
-    } else if (label === 0) {
+    } else if (label === 3 || label === 0) {
       return '#B7E6B6';
     } else {
       return '#DCE1DE';
@@ -91,18 +92,25 @@ const Todo: React.FC<TodoProps> = ({ todoData }) => {
   return (
     <>
       <View style={styles.dottedLine} />
-      { todoData.isFixed ?
-      <View style={styles.todoContainer}>
-        <Text style={styles.completionText}>{todoData.name}</Text>
-        <View style={[styles.fill, { width: `${filledWidthPercentage * 100}%`, backgroundColor: getFilledColor(todoData.label) }]} />
-        <Text style={[styles.completionText, {fontSize: 13, fontWeight: '400'}]}>고정 일정</Text>
-      </View>
-      :
-      <View style={styles.todoContainer} {...(!todoData.isFixed && panResponder.panHandlers)}>
-        <Text style={styles.completionText}>{todoData.name}</Text>
-        <View style={[styles.fill, { width: `${filledWidthPercentage * 100}%`, backgroundColor: getFilledColor(todoData.label) }]} />
-        <Text style={[styles.completionText, {fontSize: 13, fontWeight: '400'}]}>전체 완료도 {filledPercent}%</Text>
-      </View>
+      { todoData.isEverytime ?
+        <View style={styles.todoContainer}>
+          <Text style={styles.completionText}>{todoData.name}</Text>
+          <View style={[styles.fill, { width: `${filledWidthPercentage * 100}%`, backgroundColor: getFilledColor(todoData.label) }]} />
+        </View>
+        :
+        (todoData.isFixed ?
+          <View style={styles.todoContainer}>
+            <Text style={styles.completionText}>{todoData.name}</Text>
+            <View style={[styles.fill, { width: `${filledWidthPercentage * 100}%`, backgroundColor: getFilledColor(todoData.label) }]} />
+            <Text style={[styles.completionText, {fontSize: 13, fontWeight: '400'}]}>고정 일정</Text>
+          </View>
+          :
+          <View style={styles.todoContainer} {...(!todoData.isFixed && panResponder.panHandlers)}>
+            <Text style={styles.completionText}>{todoData.name}</Text>
+            <View style={[styles.fill, { width: `${filledWidthPercentage * 100}%`, backgroundColor: getFilledColor(todoData.label) }]} />
+            <Text style={[styles.completionText, {fontSize: 13, fontWeight: '400'}]}>전체 완료도 {filledPercent}%</Text>
+          </View>
+        )
       }
       <View style={styles.timeContainer}>
         <Text style={styles.timeText}>{todoData.startTime}</Text>
@@ -110,6 +118,7 @@ const Todo: React.FC<TodoProps> = ({ todoData }) => {
       </View>
     </>
   );
+  
 };
 
 const styles = StyleSheet.create({

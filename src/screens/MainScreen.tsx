@@ -114,15 +114,14 @@ const MainScreen = ({ navigation }: MainScreenProps) => {
                   key={todoData.id}
                   todoData={{
                     ...todoData,
-                    // FixedJob와 EveryTimeJob에 대해 isFixed와 completion을 설정
-                    isFixed: todoData.isFixed || todoInfo.FixedJob.some(job => job.id === todoData.id) || todoInfo.EveryTimeJob.some(job => job.id === todoData.id),
+                    isEverytime: todoInfo.EveryTimeJob.some(job => job.id === todoData.id),
+                    isFixed: todoData.isFixed || todoInfo.FixedJob.some(job => job.id === todoData.id),
                     completion: todoData.completion || (todoInfo.FixedJob.some(job => job.id === todoData.id) || todoInfo.EveryTimeJob.some(job => job.id === todoData.id) ? 100 : todoData.completion),
                   }}
                 />
               ))}
           </>
         )}
-
         </View>
       </ScrollView>
     </View>
